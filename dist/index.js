@@ -2927,7 +2927,7 @@ function main() {
             const client = new _actions_http_client__WEBPACK_IMPORTED_MODULE_1__.HttpClient();
             const startTime = Date.now();
             const bodyRegex = expectBodyRe && new RegExp(expectBodyRe);
-            const failedBodyRegex = expectBodyRe && new RegExp(failedBodyRe);
+            const failedBodyRegex = failedBodyRe && new RegExp(failedBodyRe);
             let error;
             let headers = {};
             if (customHeaders) {
