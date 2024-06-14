@@ -2911,11 +2911,15 @@ function main() {
         try {
             const url = getInput("url", true);
             const method = ((_a = getInput("method")) === null || _a === void 0 ? void 0 : _a.toUpperCase()) || "GET";
+            const failedBody = getInput("failedBody");
+            const failedBodyRe = getInput("failedBodyRegex");
             const expectBody = getInput("expectBody");
             const expectBodyRe = getInput("expectBodyRegex");
             const expectStatus = getInputNumber("expectStatus", 200);
             const timeout = getInputNumber("timeout", 60000);
             const interval = getInputNumber("interval", 1000);
+            const customHeaders = getInput("customHeaders");
+            const data = getInput("data");
             if (!SUPPORTED_METHODS.includes(method)) {
                 _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed("Specify a valid HTTP method.");
                 return;
@@ -2923,13 +2927,34 @@ function main() {
             const client = new _actions_http_client__WEBPACK_IMPORTED_MODULE_1__.HttpClient();
             const startTime = Date.now();
             const bodyRegex = expectBodyRe && new RegExp(expectBodyRe);
+            const failedBodyRegex = expectBodyRe && new RegExp(failedBodyRe);
             let error;
+            let headers = {};
+            if (customHeaders) {
+                try {
+                    headers = JSON.parse(customHeaders);
+                }
+                catch (error) {
+                    _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug(`Invalid customHeaders string: ${customHeaders}`);
+                    _actions_core__WEBPACK_IMPORTED_MODULE_0__.error(`Could not parse customHeaders string value: ${error}`);
+                }
+            }
             while (Date.now() - startTime < timeout) {
                 try {
-                    const response = yield client.request(method, url, null, {});
+                    const response = yield client.request(method, url, data, headers);
                     const status = response.message.statusCode;
                     if (status === expectStatus) {
                         const body = yield response.readBody();
+                        if (failedBody && failedBody === body) {
+                            _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput("response", body);
+                            _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Got failed response`);
+                            return;
+                        }
+                        if (failedBodyRegex && failedBodyRegex.test(body)) {
+                            _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput("response", body);
+                            _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Got failed response`);
+                            return;
+                        }
                         if (expectBody && expectBody !== body) {
                             throw new Error(`Expected body: ${expectBody}, actual body: ${body}`);
                         }
