@@ -22,6 +22,12 @@ inputs:
   expectBodyRegex:
     description: Regex to match expected response body
     required: false
+  failedBody:
+    description: Failed result in response body
+    required: false
+  failedBodyRegex:
+    description: Regex to match failed result in  response body
+    required: false
   timeout:
     description: The maximum time the polling is allowed to run for (in milliseconds)
     required: false

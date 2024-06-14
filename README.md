@@ -26,6 +26,14 @@ This action can be particularly useful to check the status of a container launch
 
 **Optional** Regex to match expected response body
 
+### `failedBody`
+
+**Optional** Failed result in response body
+
+### `failedBodyRegex`
+
+**Optional** Regex to match failed result in response body
+
 ### `timeout`
 
 **Optional** The maximum time the polling is allowed to run for (in milliseconds). Default `"60000"`.

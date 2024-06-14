@@ -23,6 +23,8 @@ async function main() {
   try {
     const url = getInput("url", true);
     const method = getInput("method")?.toUpperCase() || "GET";
+    const failedBody = getInput("failedBody");
+    const failedBodyRe = getInput("failedBodyRegex");
     const expectBody = getInput("expectBody");
     const expectBodyRe = getInput("expectBodyRegex");
     const expectStatus = getInputNumber("expectStatus", 200);
@@ -37,6 +39,7 @@ async function main() {
     const client = new http.HttpClient();
     const startTime = Date.now();
     const bodyRegex = expectBodyRe && new RegExp(expectBodyRe);
+    const failedBodyRegex = expectBodyRe && new RegExp(failedBodyRe);
 
     let error: Error | undefined;
 
@@ -47,6 +50,18 @@ async function main() {
 
         if (status === expectStatus) {
           const body = await response.readBody();
+
+          if (failedBody && failedBody === body ) {
+            core.setOutput("response", body);
+            core.setFailed(`Got failed response`);
+            return
+          }
+
+          if (failedBodyRegex && failedBodyRegex.test(body) ) {
+            core.setOutput("response", body);
+            core.setFailed(`Got failed response`);
+            return
+          }
 
           if (expectBody && expectBody !== body) {
             throw new Error(`Expected body: ${expectBody}, actual body: ${body}`);
