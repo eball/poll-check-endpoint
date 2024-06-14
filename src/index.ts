@@ -41,7 +41,7 @@ async function main() {
     const client = new http.HttpClient();
     const startTime = Date.now();
     const bodyRegex = expectBodyRe && new RegExp(expectBodyRe);
-    const failedBodyRegex = expectBodyRe && new RegExp(failedBodyRe);
+    const failedBodyRegex = failedBodyRe && new RegExp(failedBodyRe);
 
     let error: Error | undefined;
     let headers = {}
