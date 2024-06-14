@@ -30,6 +30,8 @@ async function main() {
     const expectStatus = getInputNumber("expectStatus", 200);
     const timeout = getInputNumber("timeout", 60000);
     const interval = getInputNumber("interval", 1000);
+    const customHeaders = getInput("customHeaders");
+    const data = getInput("data");
 
     if (!SUPPORTED_METHODS.includes(method)) {
       core.setFailed("Specify a valid HTTP method.");
@@ -42,10 +44,19 @@ async function main() {
     const failedBodyRegex = expectBodyRe && new RegExp(failedBodyRe);
 
     let error: Error | undefined;
+    let headers = {}
+    if (customHeaders) {
+      try {
+        headers = JSON.parse(customHeaders);
+      } catch(error) {
+        core.debug(`Invalid customHeaders string: ${customHeaders}`)
+        core.error(`Could not parse customHeaders string value: ${error}`)
+      }
+    }
 
     while (Date.now() - startTime < timeout) {
       try {
-        const response = await client.request(method, url, null, {});
+        const response = await client.request(method, url, data, headers);
         const status = response.message.statusCode;
 
         if (status === expectStatus) {

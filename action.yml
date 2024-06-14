@@ -36,6 +36,13 @@ inputs:
     description: The interval at which the polling should happen (in milliseconds)
     required: false
     default: "1000"
+  customHeaders:
+    description: Additional header values as JSON string, keys in this object overwrite default headers like Content-Type
+    required: false
+  data:
+    description: 'Request Body'
+    required: false
+
 outputs:
     response:
         description: 'HTTP Response Content'
