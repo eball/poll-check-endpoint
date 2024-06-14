@@ -1,5 +1,5 @@
 name: "Poll And Check Endpoint"
-description: "A GitHub Action that polls a specified HTTP endpoint until it becomes available, and check the response result. Based on artiz/poll-endpoint"
+description: "A GitHub Action that polls a specified HTTP endpoint, and check the response result. Based on artiz/poll-endpoint"
 author: "LIU YU"
 branding:
   icon: clock
