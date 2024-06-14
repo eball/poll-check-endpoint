@@ -58,6 +58,7 @@ async function main() {
       try {
         const response = await client.request(method, url, data, headers);
         const status = response.message.statusCode;
+        core.info(`${response}`);
 
         if (status === expectStatus) {
           const body = await response.readBody();
@@ -86,10 +87,12 @@ async function main() {
 
           return;
         }
+        core.info(`status: ${status}`)
       } catch (e) {
-        // core.debug(e.message);
+        core.debug(e.message);
         error = e;
       }
+
 
       await delay(interval);
     }

@@ -2943,6 +2943,7 @@ function main() {
                 try {
                     const response = yield client.request(method, url, data, headers);
                     const status = response.message.statusCode;
+                    _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`${response}`);
                     if (status === expectStatus) {
                         const body = yield response.readBody();
                         if (failedBody && failedBody === body) {
@@ -2965,9 +2966,10 @@ function main() {
                         _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput("headers", response.message.rawHeaders);
                         return;
                     }
+                    _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`status: ${status}`);
                 }
                 catch (e) {
-                    // core.debug(e.message);
+                    _actions_core__WEBPACK_IMPORTED_MODULE_0__.debug(e.message);
                     error = e;
                 }
                 yield delay(interval);
