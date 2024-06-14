@@ -1,6 +1,6 @@
-name: "Poll Endpoint"
-description: "A GitHub Action that polls a specified HTTP endpoint until it becomes available. Based on emilioschepis/wait-for-endpoint"
-author: "Artem Kustikov"
+name: "Poll And Check Endpoint"
+description: "A GitHub Action that polls a specified HTTP endpoint until it becomes available, and check the response result. Based on artiz/poll-endpoint"
+author: "LIU YU"
 branding:
   icon: clock
   color: green
